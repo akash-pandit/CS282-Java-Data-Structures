@@ -1,7 +1,7 @@
 /**
  * Defines the structure of a regular hexagon (one where all the sides are the same length)
  */
-public class Hexagon implements Polygon, NormalPolygon {
+public class Hexagon implements Polygon {
     private double side;
     public final boolean isNormal = true;
 

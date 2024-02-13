@@ -1,7 +1,7 @@
 /**
  * Defines the structure of a square object. Default constructor initalizes all side lengths to 0.
  */
-public class Square extends Quadrilateral implements NormalPolygon {
+public class Square extends Quadrilateral {
     public final boolean isNormal = true;
 
     public Square() {
@@ -30,6 +30,7 @@ public class Square extends Quadrilateral implements NormalPolygon {
      */
     public void setHeight(double side) {
         setBase(side);
+        setHeight(side);
     }
 
     // area & perimeter defined in Quadrilateral parent class & works here

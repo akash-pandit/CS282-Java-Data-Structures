@@ -1,7 +1,7 @@
 /**
  * Defines the structure of a regular pentagon (one where all the sides are the same length)
  */
-public class Pentagon implements Polygon, NormalPolygon {
+public class Pentagon implements Polygon {
     private double side;
     public final boolean isNormal = true;
 

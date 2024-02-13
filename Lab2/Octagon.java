@@ -1,7 +1,7 @@
 /**
  * Defines the structure of a regular octagon (one where all the sides are the same length)
  */
-public class Octagon implements Polygon, NormalPolygon {
+public class Octagon implements Polygon {
     private double side;
     public final boolean isNormal = true;
 
