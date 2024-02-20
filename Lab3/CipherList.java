@@ -4,7 +4,7 @@ import java.util.HashMap;
 public class CipherList {
     private char[] alphabetArr = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
     private ArrayDeque<Character> shiftedStack = new ArrayDeque<Character>();
-    private HashMap<Character, Integer> charToInt = new HashMap(26);
+    private HashMap<Character, Integer> charToInt = new HashMap<Character, Integer>(26);
 
     public CipherList(String keyword) {
         populateMap();
