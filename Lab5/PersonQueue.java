@@ -4,22 +4,6 @@ public class PersonQueue {
 
     PersonQueue() {}
 
-    PersonQueue(int size) {
-        this.size = size;
-    }
-
-    PersonQueue(Person person) {
-        this.size = 1;
-        add(person);
-    }
-
-    PersonQueue(Person[] people) {
-        this.size = people.length;
-        for (int i = 0; i < size; i++) {
-            add(people[i]);
-        }
-    }
-
     public void add(Person person) {
         Person[] outQueue = new Person[size + 1];
 
@@ -37,9 +21,33 @@ public class PersonQueue {
             return null;
         }
         Person[] outQueue = new Person[size - 1];
-        Person person = queue[size - 1];
+        for (int i = 1; i < size; i++) {
+            outQueue[i-1] = queue[i];
+        }
+        Person person = queue[0];
         queue = outQueue;
         size--;
         return person;
     }
+
+    public Person view() {
+        return queue[0];
+    }
+
+    public int getLength() {
+        return queue.length;
+    }
+
+    // public String toString() {
+    //     String output = "[";
+
+    //     for (int i = 0; i < queue.length - 1; i++) {
+    //         output += queue[i] + ", ";
+    //     }
+    //     output += queue[queue.length-1] + "]";
+
+    //     return output;
+    // }
 }
+
+// 
