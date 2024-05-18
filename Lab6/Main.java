@@ -27,21 +27,19 @@ public class Main {
             return;
         }
 
-        Contact c1 = new Contact(
-            "Akash",
-            "Pandit",
-            8582828788L,
-            "wahoo"
-            );
-        addressBook.addContact(c1);
-            
-        Contact c2 = new Contact(
-            "Alex",
-            "Beloiu",
-            0,
-            "wahoo2"
-            );
-        addressBook.addContact(c2);
+        Contact c1 = new Contact("A", "B", 0, "C");
+        Contact c2 = new Contact("D", "E", 0, "F");
+        Contact c3 = new Contact("G", "H", 0, "I");
+        Contact c4 = new Contact("J", "K", 0, "L");
+        Contact c5 = new Contact("M", "N", 0, "O");
+
+        // addressBook.addContact(c1);
+        // addressBook.addContact(c2);
+        // addressBook.addContact(c3);
+        // addressBook.addContact(c4);
+        // addressBook.addContact(c5);
+
+        System.out.println(addressBook.findContact(c4));
         
         System.out.println(addressBook);
     }
