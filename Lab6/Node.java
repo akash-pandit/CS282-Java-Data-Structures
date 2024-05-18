@@ -1,15 +1,29 @@
-public class Node {
+import java.io.Serializable;
+
+public class Node implements Serializable {
     private Contact val;
+    private int pos;
     private Node next;
 
     Node(Contact val) {
         this.val = val;
+        this.pos = 0;
         this.next = null;
     }
 
     Node(Contact val, Node next) {
         this.val = val;
+        this.pos = 0;
         this.next = next;
+        this.next.setPos(pos);
+    }
+
+    int getPos() {
+        return pos;
+    }
+
+    void setPos(int pos) {
+        this.pos = pos;
     }
 
     Contact getContact() {
@@ -29,6 +43,8 @@ public class Node {
     }
 
     public String toString() {
-        return String.format("%s -> %s", val, next);
+        if (next != null)
+            return String.format("%s\n%s", val, next);
+        return String.format("%s\n", val);
     }
 }

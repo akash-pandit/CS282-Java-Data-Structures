@@ -1,10 +1,12 @@
-public class Contact {
+import java.io.Serializable;
+
+public class Contact implements Serializable {
     public String firstName;
     public String lastName;
-    public int phoneNumber;
+    public long phoneNumber;
     public String address;
 
-    Contact(String firstName, String lastName, int phoneNumber, String address) {
+    Contact(String firstName, String lastName, long phoneNumber, String address) {
         this.firstName = firstName.toLowerCase();
         this.lastName = lastName.toLowerCase();
         this.phoneNumber = phoneNumber;
@@ -22,6 +24,10 @@ public class Contact {
                 return true;
         }
         return false;
+    }
+
+    public boolean isDuplicate(Contact contact) {
+        return this.lastName.equals(contact.lastName) && this.firstName.equals(contact.firstName);
     }
 
     public String toString() {
