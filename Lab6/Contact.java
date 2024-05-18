@@ -27,7 +27,10 @@ public class Contact implements Serializable {
     }
 
     public boolean isDuplicate(Contact contact) {
-        return this.lastName.equals(contact.lastName) && this.firstName.equals(contact.firstName);
+        return this.lastName.equals(contact.lastName) && 
+        this.firstName.equals(contact.firstName) &&
+        this.phoneNumber == contact.phoneNumber &&
+        this.address.equals(contact.address);
     }
 
     public String toString() {
