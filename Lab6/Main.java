@@ -11,30 +11,8 @@ public class Main {
     static Scanner scan = new Scanner(System.in);
     static AddressBook addressBook = new AddressBook();
     public static void main(String[] args) {
-        
-
-        try {
-            ObjectInputStream oInStream = new ObjectInputStream(
-                new FileInputStream(
-                    new File("AddressBookBinary")
-                    )
-                );
-            addressBook = (AddressBook) oInStream.readObject();
-            oInStream.close();
-        } catch (FileNotFoundException e) {
-            addressBook = new AddressBook();
-        } catch (ClassNotFoundException e) {
-            System.out.println(e);
+        if (!loadAddressBook())
             return;
-        }  catch (InvalidClassException e) {
-            System.err.println(e);
-            System.err.println("Error reading from the binary, initializing new address book");
-            addressBook = new AddressBook();
-            addressBook.writeToBinary();
-        } catch (IOException e) {
-            System.out.println(e);
-            return;
-        }
 
         int menuChoice;
 
@@ -49,15 +27,12 @@ public class Main {
                     System.out.println(addressBook.CurrentPosition);
                     System.out.println("Alert: current position has been reset.");
                     break;
-            
                 case 2:
                     findContact();
                     break;
-
                 case 3:
                     editContact();
                     break;
-
                 case 4:
                     if (addressBook.PersonContainer == null) {
                         System.err.println("Error: cannot delete a contact from an empty address book.");
@@ -65,27 +40,23 @@ public class Main {
                     }
                     addressBook.deleteContact(createContact());
                     break;
-
                 case 5:
                     addressBook.getCurrent();
                     break;
-
                 case 6:
                     addressBook.print();
                     break;
-
                 case 7:
                     addressBook.makeEmpty();
                     break;
-
                 case 8:
                     break;
-
                 default:
                     System.err.println("Error: please provide a valid menu option.");
                     break;
             }
         } while (menuChoice != 8);
+        System.out.println("Exiting...");
     }
 
 
@@ -99,8 +70,37 @@ public class Main {
         "5 - Display the current contact\n" +
         "6 - Print the entire address book\n" +
         "7 - Empty the address book\n" +
-        addressBook.CurrentPosition + "\n" +
+        "8 - Exit\n" +
         "==========================================");
+    }
+
+
+    public static boolean loadAddressBook() {
+        try {
+            ObjectInputStream oInStream = new ObjectInputStream(
+                new FileInputStream(
+                    new File("AddressBookBinary")
+                    )
+                );
+            addressBook = (AddressBook) oInStream.readObject();
+            oInStream.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("No address book found, creating new address book...");
+            addressBook = new AddressBook();
+            addressBook.writeToBinary();
+        } catch (ClassNotFoundException e) {
+            System.out.println(e);
+            return false;
+        }  catch (InvalidClassException e) {
+            System.err.println(e);
+            System.err.println("Error reading from the binary, initializing new address book...");
+            addressBook = new AddressBook();
+            addressBook.writeToBinary();
+        } catch (IOException e) {
+            System.out.println(e);
+            return false;
+        }
+        return true;
     }
 
 
@@ -156,7 +156,6 @@ public class Main {
             ln = scan.nextLine();
         }
 
-       
         while (phoneNumber == 0) {
             try {
                 System.out.print("Phone number: ");
