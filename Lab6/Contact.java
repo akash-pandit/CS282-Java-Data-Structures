@@ -19,16 +19,8 @@ public class Contact implements Serializable {
     }
 
     public boolean greaterThan(Contact contact) {
-        if (this.lastName.compareTo(contact.lastName) > 0)
-            // this lastname greater, should go after contact
-            return true;
-        
-        if (this.lastName.equals(contact.lastName)) {
-            // last names match, comparing first names
-            if (this.firstName.compareTo(contact.firstName) > 0)
-                return true;
-        }
-        return false;
+        // System.out.printf("greater than? %s vs %s: %b\n", this.lastName, contact.lastName, this.lastName.compareTo(contact.lastName) > 0);
+        return this.lastName.compareTo(contact.lastName) > 0;
     }
 
     public boolean isDuplicate(Contact contact) {
