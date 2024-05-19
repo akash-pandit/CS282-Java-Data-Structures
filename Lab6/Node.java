@@ -44,7 +44,7 @@ public class Node implements Serializable {
 
     public String toString() {
         if (next != null)
-            return String.format("%s\n%s", val, next);
-        return String.format("%s\n", val);
+            return String.format("%s -> %s", val.lastName, next);
+        return String.format("%s\n", val.lastName);
     }
 }
