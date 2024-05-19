@@ -3,20 +3,17 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
-public class AddressBook implements Serializable {
-    private Node PersonContainer;
-    // private int CurrentPosition;
+public class AddressBook implements AddressBookInterface, Serializable {
+    Node PersonContainer;
+    int CurrentPosition;
 
 
     public AddressBook() {
         PersonContainer = null;
+        CurrentPosition = 0;
     }
 
 
-    public AddressBook(Node head) {
-        this.PersonContainer = head;
-    }
-    
     private boolean checkForDupes(Contact contact) {
         if (PersonContainer == null)
             return false;
@@ -30,12 +27,14 @@ public class AddressBook implements Serializable {
         return false;
     }
 
+
     public void addContact(Contact contact) {
         Node node = new Node(contact);
         
         // handle empty book
         if (PersonContainer == null) {
             PersonContainer = node;
+            CurrentPosition = 1;
             return;
         }
 
@@ -49,7 +48,6 @@ public class AddressBook implements Serializable {
 
         node.setNext(PersonContainer);
         PersonContainer = node;
-        
         
         // Sort new addition into contact
         while (contact.greaterThan(nextContact)) {
@@ -65,17 +63,7 @@ public class AddressBook implements Serializable {
         }
         
         // Save changes to addressbook in a file
-        try {
-            ObjectOutputStream oOutStream = new ObjectOutputStream(
-                new FileOutputStream("AddressBookBinary")
-            );
-            oOutStream.writeObject(this);
-            System.out.println("Wrote file to binary");
-            oOutStream.close();
-        } catch (IOException e) {
-            System.err.println(e);
-            System.out.println("Failed to save change to address book");
-        }
+        writeToBinary();
     }  // end addContact
 
 
@@ -86,63 +74,136 @@ public class AddressBook implements Serializable {
         }
 
         Node node = PersonContainer;
-
-        if (PersonContainer.getContact().isDuplicate(contact)) {
-            PersonContainer = PersonContainer.getNext();
+        boolean listLen1 = node.getNext() == null;
+        
+        // only 1 node & its a duplicate
+        if (listLen1 && node.getContact().isDuplicate(contact)) {
+            PersonContainer = null;
+            CurrentPosition = 0;
             System.out.println(String.format("Removed contact %s.", contact));
-
-            // Save changes to addressbook in a file
-            try {
-                ObjectOutputStream oOutStream = new ObjectOutputStream(
-                    new FileOutputStream("AddressBookBinary")
-                );
-                oOutStream.writeObject(this);
-                System.out.println("Wrote file to binary");
-                oOutStream.close();
-            } catch (IOException e) {
-                System.err.println(e);
-                System.out.println("Failed to save change to address book");
-                return;
-            }
+            writeToBinary();
+            return;
         }
 
+        Contact nextContact;
+        
+        // while node points to the next node:
         while (node.getNext() != null) {
-            node = node.getNext();
-            if (node.getContact().isDuplicate(contact)) {
-                System.out.println(String.format("Removed contact %s.", contact));
+            // node -> node -> ...
+            // cur     nxt
+            nextContact = node.getNext().getContact();
+            System.out.println(nextContact.getName() + " vs " + contact.getName());
 
-                try {
-                    ObjectOutputStream oOutStream = new ObjectOutputStream(
-                        new FileOutputStream("AddressBookBinary")
-                    );
-                    oOutStream.writeObject(this);
-                    System.out.println("Wrote file to binary");
-                    oOutStream.close();
-                } catch (IOException e) {
-                    System.err.println(e);
-                    System.out.println("Failed to save change to address book");
-                    return;
+            if (nextContact.isDuplicate(contact)) {
+                if (findContact(nextContact.getName()) == CurrentPosition) {
+                    System.out.print("Removing the current contact, current position resetting.");
+                    CurrentPosition = 1;
                 }
+                node.setNext(node.getNext().getNext()); // node -> ...
+                writeToBinary(); // save changes
+
+                System.out.println(String.format("Removed contact %s.", contact));
             }
+            node = node.getNext();
+            if (node == null)
+                System.out.println("Contact could not be deleted: does not exist.");
+                break;
         }
+        if (PersonContainer == null)
+            CurrentPosition = 0;
     }
 
 
-    public int findContact(Contact contact) {
-        int contactInd = 0;
-        Node node = PersonContainer;
+    public int findContact(String name) {
+        if (CurrentPosition == 0)
+            return 0;
 
-        if (node == null)
-            return -1;
-        
+        Node node = PersonContainer;
+        int iterPos = 1;
         while (node != null) {
-            if (contact.isDuplicate(node.getContact())) {
-                return contactInd;
-            }
-            contactInd++;
+            String contactName = node.getContact().getName();
+            System.out.printf("findContact: name %s vs contactName %s\n", name, contactName);
+            if (name.equalsIgnoreCase(contactName))
+                return iterPos;
+
+            iterPos++;
             node = node.getNext();
         }
-        return -1;
+        return 0; // not found
+    }
+
+
+    public void getCurrent() {
+        Contact contact = returnCurrent();
+        if (contact != null)
+            System.out.println(contact.printFull());
+    }
+
+    
+    public Contact returnCurrent() {
+        // handle empty linked list
+        if (CurrentPosition == 0) {
+            System.err.println("Error: There is no current contact as the address book is empty.");
+            return null;
+        }
+
+        Node node = PersonContainer;
+
+        // traverse to current node
+        for (int i = 1; i < CurrentPosition; i++) {
+            node = node.getNext();
+        }
+        return node.getContact();
+    }
+
+
+    public void makeEmpty() {
+        if (PersonContainer == null) {
+            System.err.println("Address book is already empty.");
+            if (CurrentPosition != 0) {
+                System.err.printf("Error: CurrentPosition is %d instead of 0\n", CurrentPosition);
+            }
+            return;
+        }
+        PersonContainer = null;
+        CurrentPosition = 0;
+        System.out.println("Address book has been emptied.");
+        writeToBinary();
+    }
+
+
+    public void writeToBinary() {
+        try {
+            ObjectOutputStream oOutStream = new ObjectOutputStream(
+                new FileOutputStream("AddressBookBinary")
+            );
+            oOutStream.writeObject(this);
+            // System.out.println("Wrote file to binary");
+            oOutStream.close();
+        } catch (IOException e) {
+            System.err.println(e);
+            System.out.println("Failed to save change to address book");
+        } 
+    }
+
+
+    public void print() {
+        Node node = PersonContainer;
+        int currentPos = 1;
+        
+        System.out.println("- = [ Address Book ] = -");
+        if (node == null)
+            System.out.println("(Empty Address Book)");
+
+        while (node != null) {
+            if (currentPos == CurrentPosition) {
+                System.out.print("-> ");
+            } else
+                System.out.print("   ");
+            System.out.println(node.getContact().getName());
+            currentPos++;
+            node = node.getNext();
+        }
     }
 
 
