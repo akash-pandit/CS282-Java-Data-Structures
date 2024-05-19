@@ -39,7 +39,6 @@ public class AddressBook implements AddressBookInterface, Serializable {
         }
 
         Contact nextContact = PersonContainer.getContact();
-
         // Check for duplicates
         if (checkForDupes(contact)) {
             System.out.println("Contact " + contact + " is a duplicate.");
@@ -51,18 +50,19 @@ public class AddressBook implements AddressBookInterface, Serializable {
         
         // Sort new addition into contact
         while (contact.greaterThan(nextContact)) {
+            // System.out.printf("[LOG] swapping contacts\n");
+            // System.out.printf("[LOG] pre swap: node: %s", node);
+            node.setContact(nextContact);
+            node.getNext().setContact(contact);
+            // System.out.printf("[LOG] post swap: node: %s", node);
+            node = node.getNext();
+            System.out.println(node);
             if (node.getNext() == null)
                 break;
             contact = node.getContact();
             nextContact = node.getNext().getContact();
-
-            node.setContact(nextContact);
-            node.getNext().setContact(contact);
-
-            node = node.getNext();
         }
-        
-        // Save changes to addressbook in a file
+        // Save changes to address book in a file
         writeToBinary();
     }  // end addContact
 
@@ -86,7 +86,6 @@ public class AddressBook implements AddressBookInterface, Serializable {
         }
 
         Contact nextContact;
-        
         // while node points to the next node:
         while (node.getNext() != null) {
             // node -> node -> ...
@@ -122,7 +121,7 @@ public class AddressBook implements AddressBookInterface, Serializable {
         int iterPos = 1;
         while (node != null) {
             String contactName = node.getContact().getName();
-            System.out.printf("findContact: name %s vs contactName %s\n", name, contactName);
+            // System.out.printf("[LOG] findContact: name %s vs contactName %s\n", name, contactName);
             if (name.equalsIgnoreCase(contactName))
                 return iterPos;
 
