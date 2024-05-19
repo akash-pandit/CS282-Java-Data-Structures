@@ -114,9 +114,8 @@ public class BankAccount {
 			choice=99;
 		}
 		
-
-		
 		System.out.println(); //prints blank line
+		sc.close();
 		return choice;
 	}
 }
