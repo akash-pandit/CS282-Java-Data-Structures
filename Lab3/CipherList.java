@@ -8,7 +8,7 @@ public class CipherList {
     public String getCipher() {
         return keyword;
     }
- 
+
     public ArrayDeque<Character> getEncryptStack() {
         return shiftedStack;
     }
@@ -58,11 +58,51 @@ public class CipherList {
                 output += ch;
             }
         }
+        System.out.println(shiftedStack);
         return output;
     }
 
+
+    public String decrypt(String toDecrypt) {
+        toDecrypt = toDecrypt.toUpperCase();
+        String output = "";
+        int[] charPositions = getDecryptPosition(toDecrypt);
+
+        for (int i = 0; i < toDecrypt.length(); i++) {
+            char ch = toDecrypt.charAt(i);
+            if (Character.isLetter(ch)) {
+                int charPos = charPositions[i];
+                output += (char) alphabetArr[charPos];
+            } else {
+                output += ch;
+            }
+        }
+        return output;
+    }
+
+
+    private int[] getDecryptPosition(String toDecrypt) {
+        int[] positions = new int[toDecrypt.length()];
+
+        for (int pos_idx = 0; pos_idx < toDecrypt.length(); pos_idx++) {
+            char ch = toDecrypt.charAt(pos_idx);
+            if (!Character.isLetter(ch)) {
+                positions[pos_idx] = -1;
+                continue;
+            }
+
+            for (int chArr_idx = 0; chArr_idx < 26; chArr_idx++) {
+                char shiftedChar = (char) shiftedStack.toArray()[chArr_idx];
+
+                if (ch == shiftedChar)
+                    positions[pos_idx] = chArr_idx;
+            }
+        }
+        return positions;
+    }
+
     /**
-     * removes duplicate charactes and case-sensitivity from the cipher keyword
+     * removes duplicate characters and case-sensitivity from the cipher keyword
      * @param keyword the cipher keyword
      * @return the cleaned keyword
      */
