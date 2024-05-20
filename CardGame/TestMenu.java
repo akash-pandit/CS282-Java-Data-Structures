@@ -3,7 +3,7 @@ import java.util.Scanner;
 public class TestMenu {
     public static void main(String[] args) {
         Deck deck = new Deck();
-        Player player = new Player("Eighto");
+        Player player = new Player("TestPlayer");
         int menuSelection;
         Scanner scan = new Scanner(System.in);
 
