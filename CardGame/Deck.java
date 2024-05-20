@@ -1,13 +1,47 @@
+import java.util.LinkedList;
+import java.util.Collections;
+
 public class Deck {
-    private Card[] deck;
-    private char[] suits = {'d', 'c', 'h', 's'};
+    private LinkedList<Card> deck;
+    private static String[] suits = {"D", "C", "H", "S"};
 
     public Deck() {
-        deck = new Card[52];
+        deck = new LinkedList<>();
 
-
-        for (int i = 1; i < 53; i++) {
-            
+        for (String suit : suits) {
+            for (int rank = 1; rank < 14; rank++)
+                deck.add(new Card(rank, suit));
         }
+    }
+
+
+    public Card deal() {
+        if (deck.peek() == null) {
+            System.err.println("Error: deck is empty.");
+            return null;
+        }
+        Card dealtCard = deck.pop();
+        return dealtCard;
+    }
+
+
+    /**
+     * pregame shuffling of the deck while the top card (starter) is not 8
+     */
+    public void shuffle() {
+        boolean isEight = false;
+        do {
+            Collections.shuffle(deck);
+            isEight = deck.get(0).isEight();
+        } while (isEight);
+    }
+
+
+    public String toString() {
+        String output = "";
+        for (Card card : deck) {
+            output += card + "\n";
+        }
+        return output;
     }
 }
