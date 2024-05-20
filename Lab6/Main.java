@@ -131,8 +131,9 @@ public class Main {
             return;
         }
         System.out.println("Re-enter each contact field's values as you would like.");
-        addressBook.deleteContact(addressBook.returnCurrent());
+        Contact toDelete = addressBook.returnCurrent();
         addressBook.addContact(createContact());
+        addressBook.deleteContact(toDelete);
     }
 
 
