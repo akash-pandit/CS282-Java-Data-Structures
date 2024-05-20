@@ -56,7 +56,7 @@ public class AddressBook implements AddressBookInterface, Serializable {
             node.getNext().setContact(contact);
             // System.out.printf("[LOG] post swap: node: %s", node);
             node = node.getNext();
-            System.out.println(node);
+            // System.out.println(node);
             if (node.getNext() == null)
                 break;
             contact = node.getContact();
@@ -77,10 +77,15 @@ public class AddressBook implements AddressBookInterface, Serializable {
         boolean listLen1 = node.getNext() == null;
         
         // only 1 node & its a duplicate
-        if (listLen1 && node.getContact().isDuplicate(contact)) {
-            PersonContainer = null;
-            CurrentPosition = 0;
-            System.out.println(String.format("Removed contact %s.", contact));
+        // log(node.toString());
+        // log(node.getContact().getName());
+        // log(((Boolean) node.getContact().isDuplicate(contact)).toString());
+        if (node.getContact().isDuplicate(contact)) {
+            PersonContainer = PersonContainer.getNext();
+            CurrentPosition = 1;
+            if (listLen1)
+                CurrentPosition = 0;
+            System.out.printf("Removed contact %s.\n", contact);
             writeToBinary();
             return;
         }
@@ -95,18 +100,20 @@ public class AddressBook implements AddressBookInterface, Serializable {
 
             if (nextContact.isDuplicate(contact)) {
                 if (findContact(nextContact.getName()) == CurrentPosition) {
-                    System.out.print("Removing the current contact, current position resetting.");
+                    System.out.println("Removing the current contact, current position resetting.");
                     CurrentPosition = 1;
                 }
                 node.setNext(node.getNext().getNext()); // node -> ...
                 writeToBinary(); // save changes
 
-                System.out.println(String.format("Removed contact %s.", contact));
+                System.out.printf("Removed contact %s.\n", contact);
             }
+            log(node.toString());
             node = node.getNext();
-            if (node == null)
+            if (node == null) {
                 System.out.println("Contact could not be deleted: does not exist.");
                 break;
+            }
         }
         if (PersonContainer == null)
             CurrentPosition = 0;
@@ -203,6 +210,11 @@ public class AddressBook implements AddressBookInterface, Serializable {
             currentPos++;
             node = node.getNext();
         }
+    }
+
+
+    private void log(String message) {
+        System.out.println("[LOG] " + message);
     }
 
 
