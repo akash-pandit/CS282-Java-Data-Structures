@@ -96,7 +96,7 @@ public class AddressBook implements AddressBookInterface, Serializable {
             // node -> node -> ...
             // cur     nxt
             nextContact = node.getNext().getContact();
-            System.out.println(nextContact.getName() + " vs " + contact.getName());
+            // System.out.println(nextContact.getName() + " vs " + contact.getName());
 
             if (nextContact.isDuplicate(contact)) {
                 if (findContact(nextContact.getName()) == CurrentPosition) {
@@ -108,7 +108,7 @@ public class AddressBook implements AddressBookInterface, Serializable {
 
                 System.out.printf("Removed contact %s.\n", contact);
             }
-            log(node.toString());
+            // log(node.toString());
             node = node.getNext();
             if (node == null) {
                 System.out.println("Contact could not be deleted: does not exist.");
