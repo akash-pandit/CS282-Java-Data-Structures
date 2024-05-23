@@ -1,16 +1,10 @@
 public class Card {
     private int rank;
     private String suit;
-    // private int pointVal;
 
     public Card(int rank, String suit) {
         this.rank = rank;
         this.suit = suit;
-    //     this.pointVal = rank;
-    //     if (rank > 10)
-    //         this.pointVal = 10;
-    //     if (rank == 8)
-    //         this.pointVal = 50;
     }
 
     
@@ -22,11 +16,6 @@ public class Card {
     public String getSuit() {
         return suit;
     }
-
-
-    // public int getPointVal() {
-    //     return this.pointVal;
-    // }
 
 
     public boolean isEight() {

@@ -59,33 +59,151 @@ public class Crazy8s {
         deck.shuffle();
         discardPile.add(0, deck.deal()); // first card
 
-        // Game loop
-        boolean isWinner = false;
+        // distribute beginning hands
+        for (Player player : players) {
+            for (int i = 0; i < 5; i++)
+                player.drawCard(deck);
+        }
 
-        while (!isWinner) // 1 round
+        // Game loop
+        Player winner = null;
+        while (winner == null) // 1 round
         { 
             for (int i = 0; i < players.size(); i++) // 1 player action
             {  
                 Player player = players.get(i);
                 // player action
+                Card topCard = discardPile.get(0);
+                Card cardToPlay = null;
 
-                isWinner = checkForWinner(player);
-                if (isWinner)
+                while (!player.canPlayCard(topCard)) 
+                { // no playable
+                    winner = safeDrawCard(player, players, winner);
+                }  // end no playable
+                if (player.canPlayCard(topCard)) 
+                {  // eights
+                    if (!player.onlyEightsPlayable(topCard)) 
+                    {  // playable cards
+                        System.out.printf("CURRENT CARD: %s\n\n", topCard);
+                        player.displayHand();
+
+
+
+                        // TODO: fix selectCardToPlay to validate a correct choice
+                        
+                        
+                        
+                        cardToPlay = player.selectCardToPlay(false);
+                        discardPile.add(0, cardToPlay);
+                    }  // end eights
+                    else 
+                    {  // playable non 8 cards
+                        while (player.onlyEightsPlayable(topCard)) 
+                        {  // only 8s (play or draw)
+                            int index = getCardIndex(player);
+                            if (index == -1) {  // draw card
+                                winner = safeDrawCard(player, players, winner);
+                            }  // end draw card
+                            else 
+                            {  // play card
+                                System.out.printf("CURRENT CARD: %s\n\n", topCard);
+                                player.displayHand();
+                                        
+
+
+                                // TODO: fix selectCardToPlay to validate a correct choice
+                                
+                                
+                                
+                                cardToPlay = player.selectCardToPlay(false);
+                                discardPile.add(0, cardToPlay);
+                            }  // end play card
+                        }  // end only 8s (play or draw)
+                    }  // end playable non 8 cards
+                }  // end playable cards
+                
+                winner = checkForWinner(player);
+                if (winner != null)
                     break;
-            }
+            }  // end round
         }
+    }
+
+
+    /**
+     * play or draw a card by index gotten with stdin scanner
+     * @param player player to get hand from
+     * @return index of card to play or -1 to draw
+     */
+    public static int getCardIndex(Player player) {
+        int index = -2;
+        while (index == -2) 
+        {  // index validation
+            try {
+                System.out.print("Select a card by index: (1st card = 0, 2nd = 1, etc.): ");
+                index = scan.nextInt();
+                scan.nextLine();
+                if (index < -2 || index >= player.getHand().size()) {
+                    System.out.println("Invalid index.");
+                    index = -2;
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Please input a valid integer index.");
+                index = -2;
+            }
+        }  // end index validation
+        return index;
+    }
+
+
+    /**
+     * Draw a card while handling empty deck/discard pile and check for a winner
+     * @param player - the player object to draw the card with
+     * @param players - arraylist of all players
+     * @param winner - current winner, likely null
+     * @return new winner if change, else old winner
+     */
+    public static Player safeDrawCard(Player player, ArrayList<Player> players, Player winner) {
+        if (deck.getSize() == 0) 
+        {  // empty deck
+            if (discardPile.size() == 0)  // no cards in circulation
+                winner = players.get(getSmallestHand(players));
+            deck.recycleDiscardPile(discardPile);
+            discardPile.add(0, deck.deal());
+        }  // end empty deck
+        player.drawCard(deck);
+        return winner;
     }
 
 
     /**
      * Check if a given player has won the game
      * @param player current player
-     * @return whether player won the game
+     * @return the player if they won, else null
      */
-    public static boolean checkForWinner(Player player) {
-        if (player.getHandSize() == 0)
-            return true;
-        return false;
+    public static Player checkForWinner(Player player) {
+        if (player.getHand().isEmpty()) {
+            return player;
+        }
+        return null;
+    }
+
+    /**
+     * run on the condition that all cards are out of circulation,
+     * the winner is the player with the least cards
+     * @return index of winning player in player array
+     */
+    public static int getSmallestHand(ArrayList<Player> players) {
+        int min = 53;
+        int winnerInd = 0;
+        for (int i = 0; i < players.size(); i++) {
+            int cardCount = players.get(i).getHand().size();
+            if (cardCount < min) {
+                min = cardCount;
+                winnerInd = i;
+            }
+        }
+        return winnerInd;
     }
 
 
@@ -108,12 +226,13 @@ public class Crazy8s {
             try {
                 System.out.print("Number of players (2 to 5): ");
                 playerCount = scan.nextInt();
-                scan.nextLine();
             } catch (InputMismatchException e) {
+                scan.nextLine();
                 System.err.println("Error: Invalid player count.");
                 playerCount = 0;
             }
         }
+        scan.nextLine();
         
         ArrayList<Player> players = new ArrayList<>();
         String playerName;
@@ -121,6 +240,10 @@ public class Crazy8s {
         for (int i = 0; i < playerCount; i++) {
             System.out.print("Player " + (i + 1) + " name: ");
             playerName = scan.nextLine();
+            while (playerName == "") {
+                System.out.print("Please input a valid player name: ");
+                playerName = scan.nextLine();
+            }
             players.add(new Player(playerName));
         }
 

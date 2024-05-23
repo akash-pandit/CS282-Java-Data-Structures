@@ -29,11 +29,8 @@ public class TestMenu {
                     break;
                 case 3:
                     System.out.println("Dealing card to player...");
-                    Card dealtCard = deck.deal();
-                    if (dealtCard == null)
-                        break;
-                    player.drawCard(dealtCard);
-                    player.viewHand();
+                    player.drawCard(deck);
+                    player.displayHand();
                     break;
                 case 4:
                     System.out.println("Exiting...");
