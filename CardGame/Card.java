@@ -8,33 +8,49 @@ public class Card {
     }
 
     
+    /**
+     * getter for rank
+     * @return rank
+     */
     public int getRank() {
         return rank;
     }
 
-
+    
+    /**
+     * getter for suit
+     * @return suit
+     */
     public String getSuit() {
         return suit;
     }
 
 
+    /**
+     * tells us if a card is eight
+     * @return if its eight
+     */
     public boolean isEight() {
         return rank == 8;
     }
 
-
+    /**
+     * Convert a card's rank to a printable format
+     * @param rank card's integer rank
+     * @return string form of rank
+     */
     public String rankToStr(int rank) {
         switch (rank) {
             case 1:
-                return "A";
+                return "Ace";
             case 10:
                 return "10";
             case 11:
-                return "J";
+                return "Jack";
             case 12:
-                return "Q";
+                return "Queen";
             case 13:
-                return "K"; 
+                return "King"; 
             default:
                 return String.format("%c", 48 + rank);
         }
@@ -42,6 +58,10 @@ public class Card {
 
 
     public String toString() {
-        return rankToStr(rank) + " of " + suit;
+        String output = rankToStr(rank) + " of " + suit;
+        
+        if (isEight())
+            return output + " (wildcard)";
+        return output;
     }
 }

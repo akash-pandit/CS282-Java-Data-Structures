@@ -5,10 +5,10 @@ import java.util.Collections;
 
 public class Deck {
     private LinkedList<Card> deck;
-    private static String[] suits = {"D", "C", "H", "S"};
+    private static String[] suits = {"Diamonds", "Clubs", "Hearts", "Spades"};
 
 
-    /*
+    /**
      * Creates and populates a deck of cards
      */
     public Deck() {
