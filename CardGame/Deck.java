@@ -3,6 +3,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 
+/**
+ * class Deck
+ * container structure that acts as the blueprint for game decks. Contains the actual deck and a reference array of suits.
+ * 
+ * Creating a deck object initializes a new deck and populates it with a full unsorted deck of 52 cards.
+ * Methods allow for users to deal from the deck, shuffle the deck, get the deck's size, and recycle the discard
+ * pile into a new deck for when it runs out if necessary.
+ * 
+ * @author Akash Pandit (aspandit@ucsc.edu)
+ */
 public class Deck {
     private LinkedList<Card> deck;
     private static String[] suits = {"Diamonds", "Clubs", "Hearts", "Spades"};

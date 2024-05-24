@@ -1,5 +1,13 @@
 import java.util.Scanner;
 
+
+/**
+ * class TestMenu
+ * 
+ * a rudimentary class that provides an interface to demonstrate deck creation, sorting, and dealing.
+ * 
+ * @author Akash Pandit (aspandit@ucsc.edu)
+ */
 public class TestMenu {
     public static void main(String[] args) {
         Deck deck = new Deck();

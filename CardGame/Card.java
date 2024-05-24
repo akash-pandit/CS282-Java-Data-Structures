@@ -1,3 +1,9 @@
+/**
+ * class Card
+ * container structure for a card, provides information on its rank, suit, and if its an eight
+ * 
+ * @author Akash Pandit (aspandit@ucsc.edu)
+ */
 public class Card {
     private int rank;
     private String suit;

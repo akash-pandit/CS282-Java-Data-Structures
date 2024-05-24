@@ -1,7 +1,8 @@
 /**
  * Final Lab: Card Game (Crazy Eights)
  * 
- * A rudimentary TUI implementation of the card game crazy eights, except parts are taken from uno (a spin off game)
+ * A rudimentary TUI implementation of the card game crazy eights, except parts are taken from uno (a spin off game).
+ * 2 to 5 players can play with 
  * 
  * @author Akash Pandit (aspandit@ucsc.edu)
  */
@@ -11,6 +12,15 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 
+/**
+ * class Crazy8s
+ * the main class for this program, provides static utility methods alongside the main method.
+ * houses the game deck and discard pile.
+ * 
+ * Core methods include the main method, printing the main menu, running the game, printing
+ * the rules, and running test mode. All other provided methods are helpers to assist in 
+ * executing the game engine (runGame()).
+ */
 public class Crazy8s {
     static Scanner scan = new Scanner(System.in);
     static Deck deck = new Deck();

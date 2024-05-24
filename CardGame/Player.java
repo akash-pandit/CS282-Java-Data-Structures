@@ -3,6 +3,16 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 
+/**
+ * class player
+ * structure to hold information on players
+ * holds the player's name and hand, with methods to access them
+ * 
+ * also provides methods to draw a card, select a card to play,
+ * and validate that card. 
+ * 
+ * @author Akash Pandit (aspandit@ucsc.edu)
+ */
 class Player {
     private String name;
     private ArrayList<Card> hand;
